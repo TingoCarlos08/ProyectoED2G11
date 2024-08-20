@@ -1,5 +1,6 @@
 package com.mycompany.proyecto2ed;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,6 +8,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -17,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 public class PrincipalController implements Initializable {
@@ -46,11 +50,14 @@ public class PrincipalController implements Initializable {
     private List<File> imagenesAnimales;
     private int indiceImagenActual;
 
+    private Timeline timeline;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarBotones();
         cargarImagenes();
-        mostrarSiguienteImagen();
+        mostrarPrimeraImagen(); // Cargar la primera imagen de inmediato
+        iniciarRecorridoImagenes(); // Iniciar el ciclo de imágenes
     }
 
     private void configurarBotones() {
@@ -71,23 +78,38 @@ public class PrincipalController implements Initializable {
         indiceImagenActual = 0;
     }
 
+    private void mostrarPrimeraImagen() {
+        if (!imagenesAnimales.isEmpty()) {
+            mostrarImagen(imagenesAnimales.get(indiceImagenActual));
+        }
+    }
+
     private void mostrarSiguienteImagen() {
         if (imagenesAnimales != null && !imagenesAnimales.isEmpty()) {
-            File archivoImagen = imagenesAnimales.get(indiceImagenActual);
-            try (FileInputStream fis = new FileInputStream(archivoImagen)) {
-                Image imagen = new Image(fis);
-                imgAnimales.setImage(imagen);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
             indiceImagenActual = (indiceImagenActual + 1) % imagenesAnimales.size();
+            mostrarImagen(imagenesAnimales.get(indiceImagenActual));
         }
+    }
+
+    private void mostrarImagen(File archivoImagen) {
+        try (FileInputStream fis = new FileInputStream(archivoImagen)) {
+            Image imagen = new Image(fis);
+            imgAnimales.setImage(imagen);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void iniciarRecorridoImagenes() {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> mostrarSiguienteImagen()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
     private void abrirVentanaAgregarJuego() {
         AgregarAnimalController.mapa = InicioController.formarMapaRespuestas("agregarAnimal.txt");
         try {
-            App.abrirNuevaVentana("agregarAnimal", 424, 448);
+            App.abrirNuevaVentana("agregarJuego", 424, 448);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -106,8 +128,6 @@ public class PrincipalController implements Initializable {
             if (cantidadPreguntas < 1 || cantidadPreguntas > maximoPreguntas) {
                 mostrarAlerta("Número de preguntas", "Por favor, ingrese un número de preguntas adecuado. Recuerde que el máximo de preguntas es " + maximoPreguntas);
             } else {
-                SessionManager session = SessionManager.getInstance();
-                session.setNumeroDePreguntas(cantidadPreguntas);
                 cerrarVentanaYIniciarEspera();
             }
         }
