@@ -9,9 +9,9 @@
 
 <AnchorPane id="AnchorPane" prefHeight="181.0" prefWidth="276.0" style="-fx-background-color: #906cf8;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.proyecto2ed.VentanaEsperaController">
    <children>
-      <ImageView fx:id="imgAnimalCosa" fitHeight="90.0" fitWidth="109.0" layoutX="40.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imgAnimalCosa" fitHeight="84.0" fitWidth="89.0" layoutX="40.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../images/loading.gif" />
+            <Image url="@../../../icons/loading.gif" />
          </image>
       </ImageView>
       <Label fx:id="LBL1" layoutX="14.0" layoutY="14.0" prefHeight="42.0" prefWidth="142.0" text="Piensa en un" textFill="WHITE">

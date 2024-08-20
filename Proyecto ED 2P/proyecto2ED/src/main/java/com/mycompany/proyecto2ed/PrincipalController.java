@@ -85,9 +85,9 @@ public class PrincipalController implements Initializable {
     }
 
     private void abrirVentanaAgregarJuego() {
-        AgregarJuegoController.mapa = InicioController.formarMapaRespuestas("agregarAnimal.txt");
+        AgregarAnimalController.mapa = InicioController.formarMapaRespuestas("agregarAnimal.txt");
         try {
-            App.abrirNuevaVentana("agregarJuego", 424, 448);
+            App.abrirNuevaVentana("agregarAnimal", 424, 448);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

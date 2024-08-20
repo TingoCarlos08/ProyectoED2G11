@@ -14,6 +14,7 @@ public class App extends Application {
     public static String pathFiles = "src/main/resources/files/";
     public static String pathImages = "src/main/resources/images/";
     public static String pathMusic = "src/main/resources/sonidos/";
+    public static String pathCaritas = "src/main/resources/caritas/";
 
     @Override
     public void start(Stage stage) throws IOException {

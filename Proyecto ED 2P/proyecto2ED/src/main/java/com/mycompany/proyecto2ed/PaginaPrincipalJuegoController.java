@@ -92,7 +92,7 @@ public class PaginaPrincipalJuegoController implements Initializable {
     }
 
     private void cargarImagenPensando(String nombreImagen) {
-        try (FileInputStream streamImagen = new FileInputStream(App.pathImages + nombreImagen)) {
+        try (FileInputStream streamImagen = new FileInputStream(App.pathCaritas + nombreImagen)) {
             Image imagen = new Image(streamImagen);
             imagenPensando.setImage(imagen);
         } catch (IOException ex) {

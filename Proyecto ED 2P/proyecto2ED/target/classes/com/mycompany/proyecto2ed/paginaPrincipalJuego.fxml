@@ -22,9 +22,9 @@
             <Glow />
          </effect>
       </Label>
-      <ImageView fx:id="imagenInicio" fitHeight="46.0" fitWidth="54.0" layoutX="752.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imagenInicio" fitHeight="46.0" fitWidth="50.0" layoutX="743.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../images/iniciar-sesion.png" />
+            <Image url="@../../../icons/iniciar-sesion.png" />
          </image>
          <cursor>
             <Cursor fx:constant="HAND" />
@@ -35,9 +35,9 @@
             <Font name="Luckiest Guy Regular" size="18.0" />
          </font>
       </Label>
-      <ImageView fx:id="imagenMago" fitHeight="324.0" fitWidth="338.0" layoutX="14.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imagenMago" fitHeight="356.0" fitWidth="358.0" layoutX="1.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../images/bolaCristal.jpg" />
+            <Image url="@../../../backgrounds/bolaCristal.jpg" />
          </image>
       </ImageView>
       <Label fx:id="LBLPreguntas" alignment="CENTER" layoutX="359.0" layoutY="92.0" prefHeight="58.0" prefWidth="464.0" style="-fx-background-color: #042f7a;" text="Preguntas" textFill="WHITE">

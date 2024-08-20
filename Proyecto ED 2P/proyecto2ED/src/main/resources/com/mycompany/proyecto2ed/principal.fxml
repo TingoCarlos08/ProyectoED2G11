@@ -7,6 +7,7 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="520.0" prefWidth="424.0" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #022c43, #053f5e, #115173);" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.proyecto2ed.PrincipalController">
    <children>
@@ -19,6 +20,9 @@
          <effect>
             <DropShadow color="#000000" radius="5.0" />
          </effect>
+         <font>
+            <Font name="Century Gothic" size="37.0" />
+         </font>
       </Label>
       <Label fx:id="LBL2" alignment="CENTER" layoutY="226.0" prefHeight="34.0" prefWidth="424.0" text="Animales disponibles" textFill="#d3ecf5">
          <effect>
