@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="448.0" prefWidth="424.0" style="-fx-background-color: #31b2f1; -fx-background-radius: 15;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.proyecto2ed.PosiblesController">
+   <children>
+      <AnchorPane prefHeight="97.0" prefWidth="408.0">
+         <children>
+            <Pane layoutX="5.0" layoutY="6.0" prefHeight="83.0" prefWidth="414.0" style="-fx-border-color: #05f57c; -fx-border-radius: 15; -fx-border-width: 5; -fx-background-color: black; -fx-background-radius: 19;">
+               <children>
+                  <Label fx:id="LBL1" layoutX="82.0" layoutY="24.0" text="POSIBLES" textFill="WHITE">
+                     <font>
+                        <Font name="Luckiest Guy Regular" size="28.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="46.0" fitWidth="52.0" layoutX="14.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/estrella.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="46.0" fitWidth="52.0" layoutX="335.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/estrella.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="LBLPosibles" layoutX="208.0" layoutY="24.0" text="POSIBLES" textFill="WHITE">
+                     <font>
+                        <Font name="Luckiest Guy Regular" size="28.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="300.0" prefWidth="408.0" style="-fx-background-color: #31b2f1;">
+         <children>
+            <ScrollPane layoutX="9.0" layoutY="2.0" prefHeight="290.0" prefWidth="411.0" style="-fx-background-color: #31b2f1;">
+               <content>
+                  <FlowPane fx:id="APLista" alignment="CENTER" hgap="15.0" prefHeight="290.0" prefWidth="411.0" style="-fx-background-color: #31b2f1; -fx-border-color: #05f57c; -fx-border-radius: 15; -fx-border-width: 5;" vgap="15.0">
+                     <padding>
+                        <Insets bottom="20.0" left="5.0" right="5.0" top="20.0" />
+                     </padding>
+                  </FlowPane>
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="47.0" prefWidth="408.0" />
+   </children>
+</VBox>

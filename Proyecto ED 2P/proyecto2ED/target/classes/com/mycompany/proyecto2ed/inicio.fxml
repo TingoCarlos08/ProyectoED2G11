@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="463.0" prefWidth="392.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.proyecto2ed.InicioController">
+   <children>
+      <VBox prefHeight="469.0" prefWidth="394.0">
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="394.0" fitWidth="394.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/fondo.jpg" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="LBL1" alignment="CENTER" layoutX="103.0" layoutY="88.0" prefHeight="52.0" prefWidth="189.0" style="-fx-background-radius: 10;" text="BIENVENIDO A" textAlignment="CENTER">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="LBL2" alignment="CENTER" layoutX="8.0" layoutY="332.0" prefHeight="28.0" prefWidth="378.0" style="-fx-background-color: #ADD8E6; -fx-background-radius: 10;" text="Adivino, adivino... ¿En qué animal estás pensando?" textAlignment="CENTER">
+                     <font>
+                        <Font name="Baloo 2 Regular" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="LBL11" alignment="CENTER" layoutX="58.0" layoutY="126.0" prefHeight="87.0" prefWidth="278.0" style="-fx-background-radius: 10;" text=" Guessing Animal" textAlignment="CENTER">
+                     <font>
+                        <Font name="Copperplate Gothic Bold" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <Button fx:id="BtnJugar" mnemonicParsing="false" prefHeight="72.0" prefWidth="394.0" style="-fx-background-color: #FFCC00;" text="JUGAR">
+               <font>
+                  <Font name="Luckiest Guy Regular" size="24.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
