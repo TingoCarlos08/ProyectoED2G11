@@ -123,13 +123,16 @@ public class PrincipalController implements Initializable {
             mostrarAlerta("Número de preguntas", "Por favor, ingrese un número entero válido en el campo de número de preguntas");
         } else {
             cantidadPreguntas = Integer.parseInt(textoPreguntas);
+            System.out.println("cantidad de preguntas"+cantidadPreguntas);
             int maximoPreguntas = InicioController.preguntasAnimal.size();
-
+            System.out.println("cantidad de preguntas maximas"+maximoPreguntas);
             if (cantidadPreguntas < 1 || cantidadPreguntas > maximoPreguntas) {
                 mostrarAlerta("Número de preguntas", "Por favor, ingrese un número de preguntas adecuado. Recuerde que el máximo de preguntas es " + maximoPreguntas);
             } else {
-                cerrarVentanaYIniciarEspera();
-            }
+            SessionManager.getInstance().setNumeroDePreguntas(cantidadPreguntas);
+            
+            cerrarVentanaYIniciarEspera();
+        }
         }
     }
 

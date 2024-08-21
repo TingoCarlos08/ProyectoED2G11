@@ -62,7 +62,7 @@ public class AgregarAnimalController implements Initializable {
     private void configurarBotonAgregar() {
         BTNAgregar.setOnMouseClicked(e -> {
             if (juegoSeleccionado == null) {
-                mostrarAlerta("Seleccionar contenedor", "Por favor, seleccione un juego para añadir.");
+                mostrarAlerta("Seleccionar contenedor", "Por favor, seleccione un Animal para añadir.");
             } else if (verificarSiJuegoYaEstaAñadido(juegoSeleccionado)) {
                 mostrarAlerta("Juego encontrado", "El juego ya está en la lista de juegos del sistema. Escoja otro juego.");
             } else {

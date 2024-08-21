@@ -52,10 +52,9 @@ public class PaginaPrincipalJuegoController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        SessionManager session = SessionManager.getInstance();
-        numeroDePreguntas = session.getNumeroDePreguntas();
+        numeroDePreguntas = SessionManager.getInstance().getNumeroDePreguntas();
         if (numeroDePreguntas == null) {
-            numeroDePreguntas = 5; // Asigna un valor predeterminado o maneja la excepción como prefieras
+            numeroDePreguntas = 20; // Asigna un valor predeterminado o maneja la excepción como prefieras
         }
 
         configurarInterfaz();
@@ -72,13 +71,64 @@ public class PaginaPrincipalJuegoController implements Initializable {
         botonResponderNo.setOnAction(e -> manejarRespuesta("no"));
     }
 
+    public static BinaryTree<Object> crearArbol(int nivelActual, int maxPreguntas, ArrayList<String> listaPreguntas) {
+        System.out.println("Creando nivel " + nivelActual + " de " + maxPreguntas);
+
+        if (nivelActual >= maxPreguntas) {
+            System.out.println("Nivel máximo alcanzado. Creando nodo hoja.");
+            return new BinaryTree<>(new NodeBinaryTree<>(new ArrayList<Juego>()));
+        } else {
+            NodeBinaryTree<Object> nodo = new NodeBinaryTree<>(listaPreguntas.get(nivelActual));
+            System.out.println("Pregunta en nivel " + nivelActual + ": " + listaPreguntas.get(nivelActual));
+
+            nodo.setLeft(crearArbol(nivelActual + 1, maxPreguntas, listaPreguntas));
+            nodo.setRight(crearArbol(nivelActual + 1, maxPreguntas, listaPreguntas));
+
+            return new BinaryTree<>(nodo);
+        }
+    }
+
+    public static BinaryTree<Object> crearArbolDePreguntas(int maxPreguntas, ArrayList<String> preguntas, Map<Juego, ArrayList<String>> respuestas) {
+        System.out.println("Iniciando creación del árbol de preguntas.");
+        System.out.println(preguntas);
+        System.out.println("mac preguntas "+maxPreguntas);
+        BinaryTree<Object> arbol = crearArbol(0, maxPreguntas, preguntas);
+        System.out.println(preguntas);
+        for (Map.Entry<Juego, ArrayList<String>> entry : respuestas.entrySet()) {
+            Juego juego = entry.getKey();
+            ArrayList<String> respuestasJuego = entry.getValue();
+            NodeBinaryTree<Object> nodo = arbol.getRoot();
+
+            System.out.println("Ubicando el Animal: " + juego.getNombre());
+
+            for (int i = 0; i < maxPreguntas; i++) {
+                System.out.println("Respuesta en nivel " + i + ": " + respuestasJuego.get(i));
+                if (respuestasJuego.get(i).equals("si")) {
+                    nodo = nodo.getLeft().getRoot();
+                } else {
+                    nodo = nodo.getRight().getRoot();
+                }
+            }
+
+            System.out.println("Añadiendo juego al nodo hoja.");
+            ((ArrayList<Juego>) nodo.getContent()).add(juego);
+        }
+
+        System.out.println("Finalizada la creación del árbol de preguntas.");
+        return arbol;
+    }
+
+
     private void construirArbolDeDecisiones() {
         actualizarImagen();
         arbolDeDecisiones = crearArbolDePreguntas(numeroDePreguntas, InicioController.preguntasAnimal, InicioController.respuestasAnimal);
     }
 
     private void mostrarPregunta() {
-        etiquetaPregunta.setText((String) nodoEnProceso.getContent());
+        System.out.println(nodoEnProceso.getContent());
+        if(!esNodoFinal(nodoEnProceso)){
+        etiquetaPregunta.setText((String) nodoEnProceso.getContent());}
+        
     }
 
     private void actualizarImagen() {
@@ -170,36 +220,6 @@ public class PaginaPrincipalJuegoController implements Initializable {
             ex.printStackTrace();
         }
     }
-
-    public static BinaryTree<Object> crearArbol(int nivelActual, int maxPreguntas, List<String> listaPreguntas) {
-        if (nivelActual >= maxPreguntas) {
-            return new BinaryTree<>(new NodeBinaryTree<>(new ArrayList<Juego>()));
-        } else {
-            NodeBinaryTree<Object> nodo = new NodeBinaryTree<>(listaPreguntas.get(nivelActual));
-            nodo.setLeft(crearArbol(nivelActual + 1, maxPreguntas, listaPreguntas));
-            nodo.setRight(crearArbol(nivelActual + 1, maxPreguntas, listaPreguntas));
-            return new BinaryTree<>(nodo);
-        }
-    }
-
-    public static BinaryTree<Object> crearArbolDePreguntas(int maxPreguntas, ArrayList<String> preguntas, Map<Juego, ArrayList<String>> respuestas) {
-        BinaryTree<Object> arbol = crearArbol(0, maxPreguntas, preguntas);
-
-        for (Map.Entry<Juego, ArrayList<String>> entry : respuestas.entrySet()) {
-            Juego juego = entry.getKey();
-            ArrayList<String> respuestasJuego = entry.getValue();
-            NodeBinaryTree<Object> nodo = arbol.getRoot();
-
-            for (int i = 0; i < maxPreguntas; i++) {
-                nodo = respuestasJuego.get(i).equals("si") ? nodo.getLeft().getRoot() : nodo.getRight().getRoot();
-            }
-
-            ((ArrayList<Juego>) nodo.getContent()).add(juego);
-        }
-
-        return arbol;
-    }
-
     private void configurarBotonInicio() {
         imagenInicio.setOnMouseClicked(e -> cerrarVentanaInicio());
     }

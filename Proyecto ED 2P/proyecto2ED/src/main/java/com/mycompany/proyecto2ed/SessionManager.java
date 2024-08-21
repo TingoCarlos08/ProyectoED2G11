@@ -15,7 +15,7 @@ public class SessionManager {
     // Constructor privado para evitar instanciación externa
     private SessionManager() {
         // Inicializa con valor por defecto si es necesario
-        this.numeroDePreguntas = 0;
+        this.numeroDePreguntas = 20;
     }
 
     // Método para obtener la instancia única
@@ -38,7 +38,7 @@ public class SessionManager {
 
     // Método para cerrar sesión (reiniciar valores)
     public void cerrarSesion() {
-        this.numeroDePreguntas = 0; // o cualquier valor por defecto que consideres
+        this.numeroDePreguntas = 20; // o cualquier valor por defecto que consideres
     }
 }
 

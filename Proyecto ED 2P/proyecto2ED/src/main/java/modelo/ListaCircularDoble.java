@@ -8,57 +8,82 @@ package modelo;
 
 import java.util.ArrayList;
 
-public class ListaCircularDoble {
+public class ListaCircularDoble <E> {
 
-    private Nodo cabeza;
-    private Nodo actual;
+    private Nodo<E> cabeza;
+    private Nodo<E> actual;
 
-    private class Nodo {
-        Juego juego;
-        Nodo siguiente;
-        Nodo anterior;
+    private class Nodo<E> {
+        E juego;
+        Nodo<E> siguiente;
+        Nodo<E> anterior;
 
-        public Nodo(Juego juego) {
+        public Nodo(E juego) {
             this.juego = juego;
         }
+
+        public E getJuego() {
+            return juego;
+        }
+
+        public void setJuego(E juego) {
+            this.juego = juego;
+        }
+
+        public Nodo<E> getSiguiente() {
+            return siguiente;
+        }
+
+        public void setSiguiente(Nodo<E> siguiente) {
+            this.siguiente = siguiente;
+        }
+
+        public Nodo<E> getAnterior() {
+            return anterior;
+        }
+
+        public void setAnterior(Nodo<E> anterior) {
+            this.anterior = anterior;
+        }
+        
     }
 
-    public ListaCircularDoble(ArrayList<Juego> juegos) {
+    public ListaCircularDoble(ArrayList<E> juegos) {
         if (juegos == null || juegos.isEmpty()) {
             throw new IllegalArgumentException("La lista de juegos no puede estar vacía.");
         }
 
-        for (Juego juego : juegos) {
+        for (E juego : juegos) {
             agregarJuego(juego);
         }
 
         // Hacer la lista circular
-        cabeza.anterior = actual;
-        actual.siguiente = cabeza;
+        cabeza.setAnterior(actual);
+        actual.setSiguiente(cabeza);
 
         // Establecer el nodo actual en la cabeza
         actual = cabeza;
     }
 
-    private void agregarJuego(Juego juego) {
-        Nodo nuevoNodo = new Nodo(juego);
+    private void agregarJuego(E juego) {
+        Nodo<E> nuevoNodo = new Nodo<>(juego);
         if (cabeza == null) {
             cabeza = nuevoNodo;
             actual = nuevoNodo;
         } else {
-            Nodo ultimo = actual;
+            Nodo<E> ultimo = actual;
             ultimo.siguiente = nuevoNodo;
             nuevoNodo.anterior = ultimo;
             actual = nuevoNodo;
         }
     }
 
-    public Juego getActual() {
+    public E getActual() {
         return actual.juego;
     }
 
-    public void setActual(Juego juego) {
-        Nodo temp = cabeza;
+    public void setActual(E juego) {
+        Nodo<E> temp = cabeza;
         do {
             if (temp.juego.equals(juego)) {
                 actual = temp;
@@ -68,12 +93,12 @@ public class ListaCircularDoble {
         } while (temp != cabeza);
     }
 
-    public Juego getSiguiente() {
+    public E getSiguiente() {
         actual = actual.siguiente;
         return actual.juego;
     }
 
-    public Juego getAnterior() {
+    public E getAnterior() {
         actual = actual.anterior;
         return actual.juego;
     }

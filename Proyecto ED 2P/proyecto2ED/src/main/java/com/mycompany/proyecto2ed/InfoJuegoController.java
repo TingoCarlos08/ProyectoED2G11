@@ -31,7 +31,7 @@ public class InfoJuegoController implements Initializable {
     @FXML
     private Button botonSiguiente;
 
-    public static ListaCircularDoble juegosLista;
+    public static ListaCircularDoble<Juego> juegosLista;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
