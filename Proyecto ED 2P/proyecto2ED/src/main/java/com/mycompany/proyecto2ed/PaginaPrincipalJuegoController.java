@@ -1,8 +1,13 @@
 package com.mycompany.proyecto2ed;
 
+import static com.mycompany.proyecto2ed.PrincipalController.mostrarAlerta;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,11 +15,14 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import modelo.BinaryTree;
 import modelo.Juego;
@@ -28,6 +36,7 @@ public class PaginaPrincipalJuegoController implements Initializable {
     private int contadorRespuestas = 0;
     private int ultimoIndiceImagen = -1;
     private NodeBinaryTree<Object> nodoEnProceso;
+    private String respuestasUsuario = "";
 
     @FXML
     private Label etiquetaPregunta;
@@ -41,7 +50,12 @@ public class PaginaPrincipalJuegoController implements Initializable {
     private ImageView imagenPensando;
     @FXML
     private VBox panelPrincipal;
-
+    @FXML
+    private TextField nombreNuevoAnimal;
+    @FXML
+    private Label nombreArchivoImagen;
+    private File archivoImagenNuevoAnimal;
+    
     public static String[] imagenesPensando = {"preocupado.gif", "secreto.gif", "neutral.gif", "cinico.gif"};
     @FXML
     private Label LBL2;
@@ -70,7 +84,66 @@ public class PaginaPrincipalJuegoController implements Initializable {
         botonResponderSi.setOnAction(e -> manejarRespuesta("si"));
         botonResponderNo.setOnAction(e -> manejarRespuesta("no"));
     }
+    private void cargarImagenNuevoAnimal() {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
+            );
+            archivoImagenNuevoAnimal = fileChooser.showOpenDialog(panelPrincipal.getScene().getWindow());
 
+            if (archivoImagenNuevoAnimal != null) {
+                nombreArchivoImagen.setText(archivoImagenNuevoAnimal.getName());
+            }
+        }
+
+    private void agregarNuevoAnimal() {
+            String nombreAnimal = nombreNuevoAnimal.getText().trim();
+
+            if (nombreAnimal.isEmpty() || archivoImagenNuevoAnimal == null) {
+                mostrarAlerta("Faltan datos", "Por favor, ingrese el nombre y la imagen del nuevo animal.");
+                return;
+            }
+
+            // Construir la entrada de respuestas del nuevo animal
+            StringBuilder entrada = new StringBuilder();
+            entrada.append(nombreAnimal).append(",")
+                   .append(nombreAnimal.toLowerCase()).append(".png");
+
+            // Suponiendo que las respuestas dadas hasta ahora están en el nodo actual
+            // Recorremos desde la raíz hasta el nodo actual para obtener las respuestas
+            NodeBinaryTree<Object> nodoActual = arbolDeDecisiones.getRoot();
+            while (!nodoActual.equals(nodoEnProceso)) {
+                if (nodoEnProceso.equals(nodoActual.getLeft().getRoot())) {
+                    entrada.append(";si");
+                    nodoActual = nodoActual.getLeft().getRoot();
+                } else if (nodoEnProceso.equals(nodoActual.getRight().getRoot())) {
+                    entrada.append(";no");
+                    nodoActual = nodoActual.getRight().getRoot();
+                }
+            }
+
+            // Añadir respuestas 'no' para completar el número máximo de preguntas
+            while (entrada.toString().split(";").length - 1 < numeroDePreguntas) {
+                entrada.append(";no");
+            }
+
+            // Escribir la nueva entrada en el archivo
+            ManejoArchivos.escribirEnArchivo("respuestaAnimal.txt", entrada.toString());
+
+            // Guardar la imagen en el lugar adecuado
+            try {
+                Files.copy(archivoImagenNuevoAnimal.toPath(), Paths.get(App.pathImages + nombreAnimal.toLowerCase() + ".png"), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                mostrarAlerta("Error", "No se pudo guardar la imagen.");
+                return;
+            }
+
+            mostrarAlerta("Éxito", "¡El nuevo animal ha sido agregado exitosamente!");
+
+            // Reiniciar el juego o volver al menú principal
+            cerrarVentanaInicio();
+        }
     public static BinaryTree<Object> crearArbol(int nivelActual, int maxPreguntas, ArrayList<String> listaPreguntas) {
         System.out.println("Creando nivel " + nivelActual + " de " + maxPreguntas);
 
@@ -153,6 +226,7 @@ public class PaginaPrincipalJuegoController implements Initializable {
     private void manejarRespuesta(String respuesta) {
         contadorRespuestas++;
         actualizarImagen();
+        respuestasUsuario += ";" + respuesta;
         nodoEnProceso = respuesta.equals("si") ? nodoEnProceso.getLeft().getRoot() : nodoEnProceso.getRight().getRoot();
 
         if (esNodoFinal(nodoEnProceso)) {
@@ -200,12 +274,82 @@ public class PaginaPrincipalJuegoController implements Initializable {
             return null;
         }
     }
+private void mostrarDerrota() {
+    // Cambiar el texto de la etiqueta para indicar que no se encontró un animal
+    etiquetaPregunta.setText("No se encontró un animal con esas características. Puedes agregar un nuevo animal:");
+    // Limpiar el panel principal para agregar los nuevos controles
+    int numeroMaximoDePreguntas = InicioController.preguntasAnimal.size();
+    panelPrincipal.getChildren().clear();
+    if (numeroDePreguntas == numeroMaximoDePreguntas) {
+        
+        panelPrincipal.getChildren().clear();
+        // Crear los controles de entrada dinámicamente
+        Label labelNombre = new Label("Nombre del nuevo animal:");
+        TextField campoNombre = new TextField();
+        Button botonCargarImagen = new Button("Cargar Imagen");
+        Label labelNombreArchivo = new Label();
+        Button botonAgregarAnimal = new Button("Agregar Animal");
 
-    private void mostrarDerrota() {
-        mostrarImagenYVentana("triste.gif", null, 0, 0);
-        etiquetaPregunta.setText("No se encontró un animal con esas características.");
-    }
+        // Configurar el botón para cargar la imagen
+        botonCargarImagen.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
+            );
+            archivoImagenNuevoAnimal = fileChooser.showOpenDialog(panelPrincipal.getScene().getWindow());
 
+            if (archivoImagenNuevoAnimal != null) {
+                labelNombreArchivo.setText(archivoImagenNuevoAnimal.getName());
+            }
+            });
+
+            botonAgregarAnimal.setOnAction(e -> {
+                String nombreAnimal = campoNombre.getText().trim();
+
+                if (nombreAnimal.isEmpty() || archivoImagenNuevoAnimal == null) {
+                    mostrarAlerta("Faltan datos", "Por favor, ingrese el nombre y la imagen del nuevo animal.");
+                    return;
+                }
+
+                // Construir la entrada de respuestas del nuevo animal
+                StringBuilder entrada = new StringBuilder();
+                entrada.append(nombreAnimal).append(",")
+                       .append(nombreAnimal.toLowerCase()).append(".png")
+                       .append(respuestasUsuario);
+
+                // Añadir respuestas 'no' para completar el número máximo de preguntas
+                while (entrada.toString().split(";").length - 1 < numeroDePreguntas) {
+                    entrada.append(";no");
+                }
+
+                // Escribir la nueva entrada en el archivo
+                ManejoArchivos.escribirEnArchivo("respuestasAnimal.txt", entrada.toString());
+
+                // Guardar la imagen en el lugar adecuado
+                try {
+                    Files.copy(archivoImagenNuevoAnimal.toPath(), Paths.get(App.pathImages + nombreAnimal.toLowerCase() + ".png"), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    mostrarAlerta("Error", "No se pudo guardar la imagen.");
+                    return;
+                }
+
+                mostrarAlerta("Éxito", "¡El nuevo animal ha sido agregado exitosamente!");
+
+                // Reiniciar el juego o volver al menú principal
+                cerrarVentanaInicio();
+            });
+
+            // Añadir los controles al panel principal
+            panelPrincipal.getChildren().addAll(
+                labelNombre,
+                campoNombre,
+                botonCargarImagen,
+                labelNombreArchivo,
+                botonAgregarAnimal
+            );
+        }
+}
     private void mostrarImagenYVentana(String nombreImagen, String nombreVentana, int ancho, int alto) {
         try {
             panelPrincipal.getChildren().clear();

@@ -36,9 +36,8 @@ public class SessionManager {
         this.numeroDePreguntas = numeroDePreguntas;
     }
 
-    // Método para cerrar sesión (reiniciar valores)
     public void cerrarSesion() {
-        this.numeroDePreguntas = 20; // o cualquier valor por defecto que consideres
+        this.numeroDePreguntas = 20;
     }
 }
 
